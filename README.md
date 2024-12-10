@@ -160,6 +160,132 @@ To install Google App Engine, create a Hello World app, and other simple web app
 ### Result
 The simple web application was created and successfully deployed to Google App Engine.
 
+## Experiment 4: Simulate a Cloud Scenario Using CloudSim and Run a Scheduling Algorithm That is Not Present in CloudSim
+
+### Aim
+To simulate a cloud scenario using CloudSim and run a scheduling algorithm that is not present in CloudSim.
+
+### Steps
+
+#### How to Use CloudSim in Eclipse:
+CloudSim is written in Java. Basic Java programming knowledge and an understanding of cloud computing concepts are required to use CloudSim. It is a library and does not need to be installed separately. You can unpack the downloaded package into any directory, add it to the Java classpath, and it is ready to be used.
+
+Follow these steps to use CloudSim in Eclipse:
+
+1. **Download CloudSim Installable Files:**
+   - Download CloudSim from [CloudSim Downloads](https://code.google.com/p/cloudsim/downloads/list) and unzip the files.
+
+2. **Open Eclipse:**
+   - Launch Eclipse IDE.
+
+3. **Create a New Java Project:**
+   - Go to `File -> New -> Java Project` to create a new project.
+
+4. **Import CloudSim Project into the New Java Project:**
+   - Import the unpacked CloudSim project into your newly created Java project.
+
+5. **Initialize CloudSim:**
+   - The first step is to initialize the CloudSim library with the following code:
+     ```java
+     CloudSim.init(num_user, calendar, trace_flag);
+     ```
+
+6. **Create Data Centers:**
+   - Data centers are the resource providers in CloudSim. To create a data center, you need to define the `DatacenterCharacteristics` object that stores properties such as architecture, OS, machines, allocation policy, and price. Example:
+     ```java
+     Datacenter datacenter9883 = new Datacenter(name, characteristics, new VmAllocationPolicySimple(hostList), s);
+     ```
+
+7. **Create a Broker:**
+   - Create a broker using the `createBroker()` method:
+     ```java
+     DatacenterBroker broker = createBroker();
+     ```
+
+8. **Create a Virtual Machine:**
+   - Create a virtual machine with specific parameters such as ID, MIPS, number of CPUs, RAM, bandwidth, storage, and cloudlet scheduler:
+     ```java
+     Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
+     ```
+
+9. **Submit the VM List to the Broker:**
+   - Submit the list of VMs to the broker:
+     ```java
+     broker.submitVmList(vmlist);
+     ```
+
+10. **Create a Cloudlet:**
+    - Define a cloudlet with parameters like length, file size, output size, and utilization model:
+      ```java
+      Cloudlet cloudlet = new Cloudlet(id, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationMode);
+      ```
+
+11. **Submit the Cloudlet List to the Broker:**
+    - Submit the list of cloudlets to the broker:
+      ```java
+      broker.submitCloudletList(cloudletList);
+      ```
+
+#### Sample Output from the Existing Example:
+
+### Result
+The simulation was successfully executed with CloudSim. The scheduling algorithm was run, and the cloud scenario was simulated as expected.
+
+## Experiment 5: Use GAE Launcher to Launch Web Applications
+
+### Aim
+To use the GAE (Google App Engine) Launcher to create and launch web applications.
+
+### Steps
+
+1. **Creating Your First Application:**
+   - Create a folder for your Google App Engine applications, for example:
+     `C:\Documents and Settings\csev\Desktop\apps`.
+   - Inside this folder, create a sub-folder named `ae--01--trivial`, for example:
+     `C:\Documents and Settings\csev\Desktop\apps\ae--01--trivial`.
+
+2. **Writing the `app.yaml` File:**
+   - Using a text editor like [JEdit](http://www.jedit.org), create a file named `app.yaml` in the `ae--01--trivial` folder.
+   - Add the following content to the file:
+     ```yaml
+     application: ae-01-trivial
+     version: 1
+     runtime: python 
+     api_version: 1
+     handlers:
+     - url: /.*
+       script: index.py
+     ```
+   - **Note:** Type these lines manually to avoid formatting issues.
+
+3. **Writing the `index.py` File:**
+   - Create a file named `index.py` in the same `ae--01--trivial` folder.
+   - Add the following Python code:
+     ```python
+     print 'Content-Type: text/plain'
+     print ' '
+     print 'Hello there Chuck'
+     ```
+
+4. **Starting the Application:**
+   - Open the **Google App Engine Launcher**.
+   - Use the `File → Add Existing Application` command and navigate to the `ae--01--trivial` folder.
+   - Select the application, and use the launcher to control the application (start/stop).
+
+5. **Dealing with Errors:**
+   - Errors in the `app.yaml` file:
+     - The application will not start, and the launcher will display a yellow icon.
+     - View the log for details, such as indentation errors.
+   - Errors in the `index.py` file:
+     - A Python traceback error will appear in your browser.
+     - Fix the file and refresh the browser; no need to restart the server.
+
+6. **Shutting Down the Server:**
+   - To stop the application, select it in the launcher and press the **Stop** button.
+
+### Result
+Thus, a Google App Engine web application was successfully created and launched.
+
 
 ## Experiment 6: File Transfer Between Virtual Machines
 
@@ -206,3 +332,166 @@ To transfer files from one virtual machine (VM) to another.
 
 ### Result
 The file transfer between VMs and VM migration were successfully completed.
+
+# Experiment 7: Procedure to Launch Virtual Machine Using TryStack
+
+## Aim
+To launch a virtual machine using TryStack, an OpenStack demo platform.
+
+## Steps
+
+### Step 1: Create Network
+1. Go to **Network → Networks → Create Network**.
+2. Enter a **Network Name** (e.g., `internal`) and click **Next**.
+3. Set **Network Address** (e.g., `192.168.1.0/24`), **IP Version** as IPv4, and click **Next**.
+4. Add **DNS Name Servers** as `8.8.8.8` and click **Create**.
+
+### Step 2: Create Instance
+1. Navigate to **Compute → Instances → Launch Instance**.
+2. Fill in **Instance Name** (e.g., `Ubuntu 1`), select **Flavor** (e.g., `m1.medium`), and choose **Boot from Image** (e.g., `Ubuntu 14.04`).
+3. Import a **Key Pair** (use `~/.ssh/id_rsa.pub` for the public key).
+4. Select the created **Network** (e.g., `internal`) and click **Launch**.
+
+### Step 3: Create Router
+1. Go to **Network → Routers → Create Router**. Name it (e.g., `router1`).
+2. Set the **Gateway** to `external` and add the subnet (`internal`) as an interface.
+3. View the topology under **Network → Network Topology**.
+
+### Step 4: Assign Floating IP
+1. In **Compute → Instances**, click **More → Associate Floating IP** for an instance.
+2. Allocate and associate a floating IP from the `external` pool.
+
+### Step 5: Configure Security
+1. Go to **Compute → Access & Security → Security Groups → Manage Rules**.
+2. Add rules to allow:
+   - ICMP (Ping),
+   - HTTP (Port 80),
+   - SSH (Port 22).
+
+### Step 6: Connect to Instance
+1. Use the floating IP to SSH into the instance (e.g., `ssh ubuntu@<floating-ip>`).
+
+## Result
+A virtual machine was successfully launched using TryStack.
+
+## Experiment 8: Install Hadoop Single Node Cluster and Run Simple Applications Like WordCount
+
+### Aim
+To install Hadoop single node cluster and run simple applications like WordCount.
+
+### Steps
+
+1. **Install Java:**
+   - Download the Java 8 package and save it in your home directory.
+   - Extract the Java tar file using the command:
+     ```
+     tar -xvf jdk-8u101-linux-i586.tar.gz
+     ```
+
+2. **Install Hadoop:**
+   - Download the Hadoop 2.7.3 package using the command:
+     ```
+     wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop2.7.3.tar.gz
+     ```
+   - Extract the Hadoop tar file:
+     ```
+     tar -xvf hadoop-2.7.3.tar.gz
+     ```
+
+3. **Set Environment Variables:**
+   - Add the Hadoop and Java paths in the `.bashrc` file:
+     ```
+     vi .bashrc
+     ```
+   - Save and close the file.
+   - Apply the changes to the current terminal:
+     ```
+     source .bashrc
+     ```
+   - Verify the installation by checking the Java and Hadoop versions:
+     ```
+     java -version
+     hadoop version
+     ```
+
+4. **Edit Hadoop Configuration Files:**
+   - Navigate to the Hadoop configuration directory:
+     ```
+     cd hadoop-2.7.3/etc/hadoop/
+     ls
+     ```
+   - **Edit core-site.xml** to configure the NameNode:
+     ```
+     vi core-site.xml
+     ```
+   - **Edit hdfs-site.xml** to configure the HDFS daemons:
+     ```
+     vi hdfs-site.xml
+     ```
+   - **Edit mapred-site.xml** to configure MapReduce:
+     - If the file does not exist, create it:
+       ```
+       cp mapred-site.xml.template mapred-site.xml
+       vi mapred-site.xml
+       ```
+   - **Edit yarn-site.xml** to configure ResourceManager and NodeManager:
+     ```
+     vi yarn-site.xml
+     ```
+   - **Edit hadoop-env.sh** to add the Java path:
+     ```
+     vi hadoop-env.sh
+     ```
+
+5. **Format the NameNode:**
+   - Format the HDFS via the NameNode:
+     ```
+     cd hadoop-2.7.3
+     bin/hadoop namenode -format
+     ```
+
+6. **Start Hadoop Daemons:**
+   - Navigate to the `sbin` directory and start all daemons:
+     ```
+     cd hadoop-2.7.3/sbin
+     ./start-all.sh
+     ```
+   - Alternatively, start the services individually:
+     - Start NameNode:
+       ```
+       ./hadoop-daemon.sh start namenode
+       ```
+     - Start DataNode:
+       ```
+       ./hadoop-daemon.sh start datanode
+       ```
+     - Start ResourceManager:
+       ```
+       ./yarn-daemon.sh start resourcemanager
+       ```
+     - Start NodeManager:
+       ```
+       ./yarn-daemon.sh start nodemanager
+       ```
+     - Start JobHistoryServer:
+       ```
+       ./mr-jobhistory-daemon.sh start historyserver
+       ```
+
+7. **Check the Daemons:**
+   - Verify that all Hadoop services are running:
+     ```
+     jps
+     ```
+
+8. **Access the NameNode Interface:**
+   - Open your browser and go to:
+     ```
+     localhost:50070/dfshealth.html
+     ```
+
+### Applications
+Hadoop can be used for various big data applications such as distributed storage, processing, and running MapReduce jobs like WordCount. It is widely used in industries requiring large-scale data processing.
+
+### Result
+The Hadoop single node cluster was installed successfully, and simple applications, such as WordCount, were executed without issues.
